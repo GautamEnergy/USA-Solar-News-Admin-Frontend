@@ -6,12 +6,14 @@ import LoginSignupPopup from './Components/LoginSignupPopup';
 
 
 
+
 const App = () => {
   return (
     <div>
       <Navbar />
     <CardList/>
-      <LoginSignupPopup />
+
+    <LoginSignupPopup />
     
     </div>
   );

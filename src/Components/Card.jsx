@@ -1,21 +1,28 @@
+
+
+// Inside your Card component:
+
 import React, { useState } from "react";
 import { Box, Image, Text, Button, VStack, HStack, Spacer, useToast } from "@chakra-ui/react";
 import { ContextAPI } from '../ContextAPI/Context.API';
 import ViewModal from "./View";
+import EditModal from "./EditModal"; // Import your EditModal component here
 import axios from "axios";
 
 const Card = ({ _id, imageURL, title, description, date, header }) => {
-  const {DataHandler} = ContextAPI()
-  const [isOpen, SetIsOpen] = useState(false)
-  const toast = useToast()
-  // function formatDate(date) {
-  //   const options = { day: '2-digit', month: 'short', year: 'numeric' };
-  //   return date.toLocaleDateString('en-GB', options);
-  // }
+  const { DataHandler } = ContextAPI();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false); // State for edit modal
+  const toast = useToast();
 
   const onClose = () => {
-    SetIsOpen(!isOpen)
+    setIsOpen(!isOpen);
   }
+
+  const onEditClose = () => {
+    setIsEditOpen(false);
+  }
+
   const onDelete = async () => {
     try {
       toast({
@@ -25,17 +32,17 @@ const Card = ({ _id, imageURL, title, description, date, header }) => {
         duration: 1000,
         isClosable: true,
         position: 'top'
-      })
-        await axios.delete(`https://lovely-pear-kilt.cyclic.app/admin/delete?_id=${_id}`)
-        DataHandler()
+      });
+      await axios.delete(`https://lovely-pear-kilt.cyclic.app/admin/delete?_id=${_id}`);
+      DataHandler();
       toast({
         title: '',
-        description: "New Deleted Succesfully !",
+        description: "New Deleted Successfully !",
         status: 'success',
         duration: 1000,
         isClosable: true,
         position: 'top'
-      })
+      });
       
     } catch (err) {
       toast({
@@ -45,9 +52,12 @@ const Card = ({ _id, imageURL, title, description, date, header }) => {
         duration: 1000,
         isClosable: true,
         position: 'top'
-      })
+      });
     }
+  }
 
+  const onEdit = () => {
+    setIsEditOpen(true); // Open the edit modal
   }
 
   return (
@@ -61,38 +71,17 @@ const Card = ({ _id, imageURL, title, description, date, header }) => {
 
           <HStack>
             <Box _hover={{ cursor: 'pointer' }} fontWeight={500} borderRadius={'5px'} bgColor={'#BFEA7C'} padding={'5px'} onClick={onClose}>See More </Box>
-            <Box _hover={{ cursor: 'pointer' }} fontWeight={500} borderRadius={'5px'} bgColor={'#40A2E3'} padding={'5px'}>Edit</Box>
+            <Box _hover={{ cursor: 'pointer' }} fontWeight={500} borderRadius={'5px'} bgColor={'#40A2E3'} padding={'5px'} onClick={onEdit} >Edit</Box>
             <Box _hover={{ cursor: 'pointer' }} fontWeight={500} borderRadius={'5px'} bgColor={'#D04848'} padding={'5px'} onClick={onDelete}>Delete</Box>
           </HStack>
-          <ViewModal onClose={onClose} isOpen={isOpen} imageURL={imageURL} header={header} description={description} />
+          <ViewModal onClose={onClose} isOpen={isOpen} imageURL={imageURL} header={header} description={description}  />
         </VStack>
       </HStack>
+      <EditModal isOpen={isEditOpen} onClose={onEditClose} _id={_id} header={header} title={title} description={description} imageURL={imageURL} />
     </Box>
   );
 };
 
-// const CardList = ({ data }) => {
-//   return (
-//     <VStack spacing={4} align="stretch">
-//       {data.map((item) => (
-//         <Card
-//           key={item._id}
-//           imageURL={item.ImageURL}
-//           title={item.title}
-//           description={item.Description}
-//           date={item.Date}
-//         />
-//       ))}
-//     </VStack>
-//   );
-// };
-
-// const App = () => {
-//   return (
-//     <Box p={4}>
-//       <CardList data={data} />
-//     </Box>
-//   );
-// };
-
 export default Card;
+
+

@@ -20,6 +20,7 @@ const LoginSignupPopup = () => {
   const [isSignupOpen, setSignupOpen] = useState(false);
   const [isFirstTimeVisit, setIsFirstTimeVisit] = useState(true);
 
+
   useEffect(() => {
     // Check if it's the first time visiting the page
     console.log("Mount")

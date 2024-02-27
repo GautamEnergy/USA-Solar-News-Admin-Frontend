@@ -2,28 +2,38 @@ import React, { useState } from "react";
 import { FaSun, FaMoon } from "react-icons/fa";
 import PopupModal from './CreateNews'
 import SearchPopup from "./search";
+import BlogPopupModal from "./Blog"
+
+
 import {
   Flex,
   Box,
   Button,
-  IconButton,
+  IconButton, 
   useColorMode,
   Link,
   
 } from "@chakra-ui/react";
 
+
+  
 function Navbar() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
   const [isOpen, setOpen] = useState(false)
-
+ const [isOpenBlog,setOpenBlog] = useState(false);
   const toggleNav = () => {
     setIsNavOpen(!isNavOpen);
   };
 
+
   
   const Modal = ()=>{
     setOpen(!isOpen)
+  }
+
+  const BlogModalController = ()=>{
+    setOpenBlog(!isOpenBlog)
   }
 
   return (
@@ -35,6 +45,7 @@ function Navbar() {
       py="4"
       boxShadow="md"
       position='relative'
+      
     >
       
       <Flex
@@ -43,18 +54,19 @@ function Navbar() {
         alignItems="center"
         justifyContent="space-between"
         wrap="wrap"
+       
       >
         {/* Logo */}
         <Flex align="center">
-          <img
+          {/* <img
             src="https://via.placeholder.com/30"
             alt=""
             width="30"
             height="30"
             style={{ borderRadius: "50%", marginRight: "0.5rem" }}
-          />
+          /> */}
           <Link href="/" fontSize="1.5rem" fontWeight="bold" textDecoration="none">
-            USA News
+          <img src="./tempsnip.png" alt="News Name" width="150" />
           </Link>
         </Flex>
 
@@ -62,19 +74,23 @@ function Navbar() {
         <Box
           display={{ base: isNavOpen ? "block" : "none", md: "block" }}
           flexBasis={{ base: "100%", md: "auto" }}
-          mt={{ base: 4, md: 0 }}
+          mt={{ base: 4, md: 0 }} 
         >
           <Flex
             alignItems="center"
             justifyContent="space-between"
-            flexWrap="wrap"
+            flexWrap="wrap"  
+            color= "green" 
           >
             <NavLink href="/">All News</NavLink>
-            <NavLink href="/about">AD's</NavLink>
-
-            <Box style={{fontWeight:'bold'}} onClick={()=>{Modal()}} _hover={{cursor:'pointer'}}>Add News</Box>
+            <NavLink href="/about" >AD's</NavLink>
+            <Box onClick={BlogModalController}  _hover={{cursor:'pointer'}} style={{fontWeight:'bold', color: "Red" , marginRight:'13px'}}>Blog</Box>
+            <Box style={{fontWeight:'bold', color: "green" }} onClick={()=>{Modal()}} _hover={{cursor:'pointer'}}>Add News</Box>
+            <BlogPopupModal onClose={BlogModalController} isOpen={isOpenBlog}/>
             <SearchPopup/>
+            
           </Flex>
+        
         </Box>
 
         {/* Mood function & Toggle Button */}

@@ -144,7 +144,7 @@ const PopupModal = ({ isOpen, onClose }) => {
                     onChange={handleFileChange}
                   />
                 </>
-              )}
+              )}``
             </div>
             <FormControl mb={4}>
               <FormLabel>header</FormLabel>
@@ -174,3 +174,6 @@ const PopupModal = ({ isOpen, onClose }) => {
 };
 
 export default PopupModal;
+
+
+
