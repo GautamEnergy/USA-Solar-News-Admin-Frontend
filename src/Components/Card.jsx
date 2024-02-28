@@ -9,7 +9,7 @@ import ViewModal from "./View";
 import EditModal from "./EditModal"; // Import your EditModal component here
 import axios from "axios";
 
-const Card = ({ _id, imageURL, title, description, date, header }) => {
+const Card = ({ _id, imageURL, title, description, date, header, uuid }) => {
   const { DataHandler } = ContextAPI();
   const [isOpen, setIsOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false); // State for edit modal
@@ -33,7 +33,7 @@ const Card = ({ _id, imageURL, title, description, date, header }) => {
         isClosable: true,
         position: 'top'
       });
-      await axios.delete(`https://lovely-pear-kilt.cyclic.app/admin/delete?_id=${_id}`);
+      await axios.delete(`http://localhost:5000/admin/delete?_id=${_id}&uuid=${uuid}`);
       DataHandler();
       toast({
         title: '',
@@ -77,7 +77,7 @@ const Card = ({ _id, imageURL, title, description, date, header }) => {
           <ViewModal onClose={onClose} isOpen={isOpen} imageURL={imageURL} header={header} description={description}  />
         </VStack>
       </HStack>
-      <EditModal isOpen={isEditOpen} onClose={onEditClose} _id={_id} header={header} title={title} description={description} imageURL={imageURL} />
+      <EditModal isOpen={isEditOpen} onClose={onEditClose} _id={_id} uuid={uuid} header={header} title={title} description={description} imageURL={imageURL} />
     </Box>
   );
 };

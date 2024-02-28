@@ -18,9 +18,12 @@ export const ContextProvider = ({ children }) => {
   }, []);
 
   const DataHandler = async (Param) => {
+    console.log('ok')
     if (!Param) {
+      console.log('ok')
       try {
-        let { data } = await axios.get('https://lovely-pear-kilt.cyclic.app/admin/News?NoOfNews=10&Page=1');
+        let { data } = await axios.get('http://localhost:5000/admin/news?NoOfNews=10&Page=1');
+        console.log(data.data)
         setData(data.data);
       } catch (err) {
         setData([]);

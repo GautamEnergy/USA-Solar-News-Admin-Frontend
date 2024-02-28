@@ -65,7 +65,7 @@ const PopupModal = ({ isOpen, onClose }) => {
     formData.append('title', title);
     formData.append('Description', description);
     formData.append('header', header);
-    formData.append('productimage', selectedFile); // Use the same field name as defined in multer upload.single()
+    formData.append('NewsImage', selectedFile); // Use the same field name as defined in multer upload.single()
     
     toast({
       title: 'Wait',
@@ -77,7 +77,7 @@ const PopupModal = ({ isOpen, onClose }) => {
     })
 
     try {
-      const response = await fetch('https://lovely-pear-kilt.cyclic.app/admin/Upload', {
+      const response = await fetch('http://localhost:5000/admin/createNews', {
         method: 'POST',
         body: formData,
       });
@@ -144,7 +144,7 @@ const PopupModal = ({ isOpen, onClose }) => {
                     onChange={handleFileChange}
                   />
                 </>
-              )}``
+              )}
             </div>
             <FormControl mb={4}>
               <FormLabel>header</FormLabel>

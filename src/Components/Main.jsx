@@ -8,6 +8,7 @@ import { ContextAPI } from '../ContextAPI/Context.API';
 
 const CardList = () => {
     const {data} = ContextAPI()
+    console.log(data)
   return (
     <VStack spacing={4} align="stretch" paddingLeft={'40px'} paddingRight={'40px'} paddingTop={'20px'}>
       {data.length?data.map((item) => (
@@ -19,6 +20,7 @@ const CardList = () => {
           date={item.Date}
           header = {item.header}
           _id={item._id}
+          uuid = {item.uuid}
         />
       )):   <Box
       
