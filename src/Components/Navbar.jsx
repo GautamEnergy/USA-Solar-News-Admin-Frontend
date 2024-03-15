@@ -12,7 +12,7 @@ import {
   useColorMode,
   Link,
 } from "@chakra-ui/react";
-import BlogMain from "./BlogSection/BlogMain";
+
 
 function Navbar() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -58,13 +58,6 @@ function Navbar() {
       >
         {/* Logo */}
         <Flex align="center">
-          {/* <img
-            src="https://via.placeholder.com/30"
-            alt=""
-            width="30"
-            height="30"
-            style={{ borderRadius: "50%", marginRight: "0.5rem" }}
-          /> */}
           <Link
             href="/"
             fontSize="1.5rem"
@@ -105,7 +98,6 @@ function Navbar() {
             >
               Add News
             </Box>    
-            {/* <BlogPopupModal onClose={BlogModalController} isOpen={isOpenBlog} /> */}
             <SearchPopup />
 
             {isLoggedIn && (
@@ -127,7 +119,7 @@ function Navbar() {
           />
         </Flex>
       </Flex>
-      {isOpen && <BlogMain />}
+    
       <PopupModal isOpen={isOpen} onClose={Modal} />
     </Box>
   );

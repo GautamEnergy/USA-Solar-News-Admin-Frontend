@@ -15,6 +15,8 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
+import ForgotPassword from "./ForgotPassword";
+
 
 
 
@@ -156,26 +158,26 @@ const LoginSignupPopup = () => {
     setLoginOpen(true);
   };
   
-const ForgotResetPassword = async () =>{
-  if(!email) {
-    setError('please enter your email to reset password ');
-    return ;
-  }
-  try {
-    const res = await sendOTPForResetPassword(email);
-    console.log('Reset password Otp sent', res.data);
-    setOtpOpen(true);
-  } catch (error) {
-    console.log('error sending reset password otp', error)
-    setError('Error sending otp for password reset please try again')
-  }
-};
+// const ForgotResetPassword = async () =>{
+//   if(!email) {
+//     setError('please enter your email to reset password ');
+//     return ;
+//   }
+//   try {
+//     const res = await sendOTPForResetPassword(email);
+//     console.log('Reset password Otp sent', res.data);
+//     setOtpOpen(true);
+//   } catch (error) {
+//     console.log('error sending reset password otp', error)
+//     setError('Error sending otp for password reset please try again')
+//   }
+// };
 
 
-const sendOTPForResetPassword = async (email) => {
-  const data = {Email: email};
-  return await axios.put('http://localhost:5000/admin/otpforResetPassword', data )
-}
+// const sendOTPForResetPassword = async (email) => {
+//   const data = {Email: email};
+//   return await axios.put('http://localhost:5000/admin/otpforResetPassword', data )
+// }
 
 
 
@@ -301,7 +303,11 @@ const sendOTPForResetPassword = async (email) => {
             <ModalFooter> 
            
 
-              <a  href="#"    onClick={ForgotResetPassword}  style={{ marginRight: "110px", color: "blue" }} variant="ghost"   _hover={{ cursor: "pointer" }}  > Forgot Password?  </a>
+              {/* <a  href="#"    onClick={ForgotResetPassword}  style={{ marginRight: "110px", color: "blue" }} variant="ghost"   _hover={{ cursor: "pointer" }}  > Forgot Password?  </a> */}
+{/* *********      **************         ****************      **********  I am give the Forgot Password *********      **************         ****************      ********** */}
+{/* <ForgotResetPassword /> */}
+
+          <ForgotPassword />
               <Button colorScheme="blue" mr={3} onClick={adminLogin}>
                 Login
               </Button>
@@ -334,3 +340,4 @@ const sendOTPForResetPassword = async (email) => {
 };
 
 export default LoginSignupPopup;
+ 
