@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, ModalOverlay, ModalContent,useToast, ModalHeader, Slide,ModalFooter, ModalBody, ModalCloseButton, Button, Input, Textarea, Image, Box } from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, useToast, ModalHeader, Slide, ModalFooter, ModalBody, ModalCloseButton, Button, Input, Textarea, Image, Box } from "@chakra-ui/react";
 import axios from "axios";
 import Notification from "./Notification";
 import { ContextAPI } from '../ContextAPI/Context.API';
@@ -11,19 +11,19 @@ const EditModal = ({ isOpen, onClose, _id, header, title, description, imageURL,
   const [editedDescription, setEditedDescription] = useState(description);
   const [editedImage, setEditedImage] = useState(null); // State for edited image
   const [showNotification, setShowNotification] = useState(false);
-  const [NotificationTitle,SetNotificationTitle] = useState('undefined')
-  const [NotificationDiscription,SetNotificationDiscription] = useState('undefined')
-  const [NotificationStats,SetNotificationStats] = useState("undefined")
+  const [NotificationTitle, SetNotificationTitle] = useState('undefined')
+  const [NotificationDiscription, SetNotificationDiscription] = useState('undefined')
+  const [NotificationStats, SetNotificationStats] = useState("undefined")
   const toast = useToast();
-  const {DataHandler} = ContextAPI()
+  const { DataHandler } = ContextAPI()
   /** Notification Component function */
-  const NotificaitionCall = (title,description,status)=>{
+  const NotificaitionCall = (title, description, status) => {
     setShowNotification(true)
     SetNotificationTitle(title)
     SetNotificationDiscription(description)
     SetNotificationStats(status)
   }
-  
+
   /**Function to handle image change */
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -31,15 +31,15 @@ const EditModal = ({ isOpen, onClose, _id, header, title, description, imageURL,
   }
 
   /*Function to handle header change*/
-   const handleHeaderChange = (e) => {
+  const handleHeaderChange = (e) => {
     setEditedHeader(e.target.value);
   }
-/*Function to handle title change*/
+  /*Function to handle title change*/
   const handleTitleChange = (e) => {
     setEditedTitle(e.target.value);
   }
-/*Function to handle description change*/
- 
+  /*Function to handle description change*/
+
   const handleDescriptionChange = (e) => {
     setEditedDescription(e.target.value);
   }
@@ -56,33 +56,33 @@ const EditModal = ({ isOpen, onClose, _id, header, title, description, imageURL,
         formData.append('UpdateNewsImage', editedImage);
       }
 
-     const {data} =  await axios.patch(`http://localhost:5000/admin/updateNews?_id=${_id}&uuid=${uuid}`, formData, {
+      const { data } = await axios.patch(`http://localhost:5000/admin/updateNews?_id=${_id}&uuid=${uuid}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         },
       });
       console.log(data)
-      setTimeout(()=>{
+      setTimeout(() => {
         setShowNotification(false)
-      },2000)
-      setTimeout(()=>{
+      }, 2000)
+      setTimeout(() => {
         onClose();  /**Close the modal after successful edit */
-        
-      },3000)
-      
-      setTimeout(()=>{
-       
+
+      }, 3000)
+
+      setTimeout(() => {
+
         DataHandler()
         toast({
-          title:'Refresh',
-          description:'Just Once time refresh the Page to get Update Image',
-          status:'info',
-          duration:5000,
-          position:'top'
+          title: 'Refresh',
+          description: 'Just Once time refresh the Page to get Update Image',
+          status: 'info',
+          duration: 5000,
+          position: 'top'
         })
-      },3300)
-      NotificaitionCall('Updated','News Updated Succesfully!','success')
-     
+      }, 3300)
+      NotificaitionCall('Updated', 'News Updated Succesfully!', 'success')
+
     } catch (error) {
       console.error("Error editing document:", error);
     }
@@ -90,13 +90,13 @@ const EditModal = ({ isOpen, onClose, _id, header, title, description, imageURL,
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size={'500'}>
-       <ModalOverlay />
+      <ModalOverlay />
       <ModalContent>
-      <Slide direction="top" in={showNotification}>
-      <Box display={"flex"} width={"100%"} justifyContent={"center"} paddingTop={"30px"}>
-          <Notification showAlert={showNotification} status={NotificationStats} title={NotificationTitle} description={NotificationDiscription}/>
-       </Box>
-      </Slide>
+        <Slide direction="top" in={showNotification}>
+          <Box display={"flex"} width={"100%"} justifyContent={"center"} paddingTop={"30px"}>
+            <Notification showAlert={showNotification} status={NotificationStats} title={NotificationTitle} description={NotificationDiscription} />
+          </Box>
+        </Slide>
         <ModalHeader>Edit News</ModalHeader>
         <ModalCloseButton />
         <ModalBody>

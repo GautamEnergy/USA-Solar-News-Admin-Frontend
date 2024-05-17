@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaSun, FaMoon } from "react-icons/fa";
 import PopupModal from "./CreateNews";
 import SearchPopup from "./search";
-
+import { ContextAPI } from '../ContextAPI/Context.API';
 
 import {
   Flex,
@@ -15,6 +15,7 @@ import {
 
 
 function Navbar() {
+  const { login, setLogin } = ContextAPI();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
   const [isOpen, setOpen] = useState(false);
@@ -22,8 +23,8 @@ function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    setIsLoggedIn(localStorage.getItem("adminToken"));
-   
+    setIsLoggedIn(localStorage.getItem("Login"));
+
   }, []);
 
   const toggleNav = () => {
@@ -33,10 +34,11 @@ function Navbar() {
   const Modal = () => {
     setOpen(!isOpen);
   };
- 
-  
+
+
   const handleLogOut = () => {
-    localStorage.removeItem("adminToken");
+    localStorage.removeItem("Login");
+    setLogin(false)
   };
 
   return (
@@ -85,10 +87,10 @@ function Navbar() {
             color="green"
           >
             <NavLink href="/">All News</NavLink>
-            <NavLink href="/about">AD's</NavLink>
+            <NavLink href="/ads">AD's</NavLink>
             <NavLink href="/blog" >Blog</NavLink>
-           
-          
+
+
             <Box
               style={{ fontWeight: "bold", color: "green" }}
               onClick={() => {
@@ -97,14 +99,14 @@ function Navbar() {
               _hover={{ cursor: "pointer" }}
             >
               Add News
-            </Box>    
+            </Box>
             <SearchPopup />
 
-            {isLoggedIn && (
-              <a    href="#"   style={{     color: "red", fontWeight: "bold", marginLeft: "180px",paddingLeft: "122px", }} onClick={handleLogOut}_hover={{ cursor: "pointer" }}>
-                Logout </a> )}
           </Flex>
         </Box>
+        {login && (
+          <a href="#" style={{ color: "red", fontWeight: "bold", marginLeft: "180px", paddingLeft: "122px", }} onClick={handleLogOut} _hover={{ cursor: "pointer" }}>
+            Logout </a>)}
 
         {/* Mood function & Toggle Button */}
         <Flex align="center">
@@ -119,7 +121,7 @@ function Navbar() {
           />
         </Flex>
       </Flex>
-    
+
       <PopupModal isOpen={isOpen} onClose={Modal} />
     </Box>
   );

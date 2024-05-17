@@ -11,6 +11,7 @@ export const ContextAPI = () => {
 
 export const ContextProvider = ({ children }) => {
   const [data, setData] = useState([]);
+  const [login, setLogin] = useState(false);
   const toast = useToast();
 
   useEffect(() => {
@@ -42,7 +43,7 @@ export const ContextProvider = ({ children }) => {
   };
 
   return (
-    <Context.Provider value={{ DataHandler, data }}>
+    <Context.Provider value={{ DataHandler, data, login, setLogin }}>
       {children}
     </Context.Provider>
   );

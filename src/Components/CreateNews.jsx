@@ -17,11 +17,11 @@ import {
 } from '@chakra-ui/react';
 
 const PopupModal = ({ isOpen, onClose }) => {
-  const {DataHandler} = ContextAPI()
+  const { DataHandler } = ContextAPI()
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [header,setHeader] =  useState('')
+  const [header, setHeader] = useState('')
   const toast = useToast()
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const PopupModal = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = async () => {
-    
+
     if (!title || !description || !selectedFile || !header) {
       toast({
         title: 'Invalid',
@@ -56,46 +56,45 @@ const PopupModal = ({ isOpen, onClose }) => {
         status: 'info',
         duration: 5000,
         isClosable: true,
-        position:'top'
+        position: 'top'
       })
       return
     }
 
     const formData = new FormData();
-    formData.append('title', title);
-    formData.append('Description', description);
-    formData.append('header', header);
-    formData.append('NewsImage', selectedFile); // Use the same field name as defined in multer upload.single()
-    
+    formData.append('Body', description); /**Visual HTM Part */
+    formData.append('Header', header);
+    formData.append('BlogImage', selectedFile); // Use the same field name as defined in multer upload.single()
+
     toast({
       title: 'Wait',
       description: "We are creating",
       status: 'loading',
       duration: 2000,
       isClosable: true,
-      position:'top'
+      position: 'top'
     })
 
     try {
-      const response = await fetch('http://localhost:5000/admin/createNews', {
+      const response = await fetch('http://localhost:9090/admin/createNews', {
         method: 'POST',
         body: formData,
       });
       const data = await response.json();
       console.log(data)
-    
-        toast({
-          title: 'News created.',
-          description: "We've created News",
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-          position:'top'
-        })
-      
+
+      toast({
+        title: 'News created.',
+        description: "We've created News",
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'top'
+      })
+
       setTimeout(() => {
         DataHandler()
-    onClose()
+        onClose()
       }, 3000)
 
     } catch (error) {
@@ -105,7 +104,7 @@ const PopupModal = ({ isOpen, onClose }) => {
         status: 'error',
         duration: 2000,
         isClosable: true,
-        position:'top'
+        position: 'top'
       })
     }
   };

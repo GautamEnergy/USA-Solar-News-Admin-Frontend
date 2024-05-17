@@ -1,7 +1,4 @@
-// Separate PasswordResetModal component
-// This component should handle the password reset functionality
 
-// PasswordResetModal.js
 import React, { useState } from "react";
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import axios from "axios";

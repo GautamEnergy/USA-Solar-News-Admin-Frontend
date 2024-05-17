@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import { Parser } from 'html-to-react';
+import axios from "axios";
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
@@ -9,8 +11,9 @@ function TextEditor() {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState("");
+  // const [contentHtml, setcontentHtml] = useState('');
   const [description, setDescription] = useState("");
-  const [header, setHeader] = useState(""); 
+  const [header, setHeader] = useState("");
 
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
@@ -44,18 +47,32 @@ function TextEditor() {
     setSelectedFile(file);
   };
 
-  const handlePublish = () => {
+  const publishBlog = async () => {
     const contentHtml = draftToHtml(
       convertToRaw(editorState.getCurrentContent())
     );
 
-    console.log("Header:", header);
-    console.log("Content HTML:", contentHtml);
-    if (selectedFile) {
-      console.log("Selected file:", selectedFile.name);
+
+
+    const formData = new FormData();
+    formData.append("BlogImage", selectedFile);
+    formData.append("Header", header);
+    formData.append("Body", contentHtml);
+
+    try {
+      const response = await axios.post("http://localhost:9090/admin/createNews", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Blog published successfully:", response.data);
+      setSelectedFile(null);
+      setHeader("");
+      setEditorState(null);
+    } catch (error) {
+      console.error("Error publishing blog:", error.message);
     }
   };
-  
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
@@ -88,6 +105,7 @@ function TextEditor() {
               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
               style={{ display: "none" }}
               onChange={handleFileChange}
+
             />
           </>
         )}
@@ -140,7 +158,7 @@ function TextEditor() {
 
       <div style={{ marginTop: "8px" }}>
         <button
-          onClick={handlePublish}
+          onClick={publishBlog}
           style={{
             cursor: "pointer",
             background: "#A20000",
