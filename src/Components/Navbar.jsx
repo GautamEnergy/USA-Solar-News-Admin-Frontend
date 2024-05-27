@@ -87,7 +87,7 @@ function Navbar() {
             flexWrap="wrap"
             color="green"
           >
-            <NavLink href="/AllBlog">All Blog</NavLink>
+            <NavLink href="/">All Blog</NavLink>
             {/* <NavLink href="/ads">AD's</NavLink> */}
             <NavLink href="/blog" >Blog</NavLink>
 

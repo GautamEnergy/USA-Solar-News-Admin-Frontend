@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw } from "draft-js";
+import { useToast } from '@chakra-ui/react';
 import draftToHtml from "draftjs-to-html";
 import { Parser } from 'html-to-react';
 import axios from "axios";
@@ -14,6 +15,7 @@ function TextEditor() {
   // const [contentHtml, setcontentHtml] = useState('');
   const [description, setDescription] = useState("");
   const [header, setHeader] = useState("");
+  const toast = useToast();
 
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
@@ -65,7 +67,14 @@ function TextEditor() {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("Blog published successfully:", response.data);
+      toast({
+        title: '',
+        description: "Blog Created Succesfully",
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'top'
+      })
       setSelectedFile(null);
       setHeader("");
       setEditorState(null);

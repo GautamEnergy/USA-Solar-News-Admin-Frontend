@@ -1,9 +1,11 @@
 import { VStack, Box, Heading } from "@chakra-ui/react";
 import Card from "./Card";
 import { ContextAPI } from '../ContextAPI/Context.API';
+import Pagination from "./Pagination";
+import LoginPopup from "./login";
 
 const CardList = () => {
-  const { data } = ContextAPI()
+  const { data } = ContextAPI();
   // console.log('kkdkdk cerdddd', data)
   return (
     <VStack spacing={4} align="stretch" paddingLeft={'40px'} paddingRight={'40px'} paddingTop={'20px'}>
@@ -24,9 +26,11 @@ const CardList = () => {
         textAlign="center"
       >
         <Heading as="h1" size="lg" color="gray.500">
-          You have not created any news Yet!
+          You have not created any blogs Yet!
         </Heading>
       </Box>}
+      <LoginPopup/>
+      <Pagination/>
     </VStack>
   );
 };

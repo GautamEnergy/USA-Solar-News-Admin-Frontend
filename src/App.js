@@ -15,8 +15,8 @@ const App = () => {
       <Router>
         <Navbar />
         <Routes>
-          <Route path='/' element={<LoginPopup />} />
-          <Route path='/AllBlog' element={<CardList />} />
+          {/* <Route path='/' element={<LoginPopup />} /> */}
+          <Route path='/' element={<CardList />} />
           {/* <Route path='/blog' element={<BlogMain/>}/> */}
           <Route path='/blog' element={<TextEditor />} />
           {/* <Route path='/card' element={<Card />} /> */}
