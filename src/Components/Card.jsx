@@ -1,7 +1,4 @@
-
-
 // Inside your Card component:
-
 import React, { useState } from "react";
 import { Box, Image, Text, Button, VStack, HStack, Spacer, useToast } from "@chakra-ui/react";
 import { ContextAPI } from '../ContextAPI/Context.API';
@@ -33,7 +30,7 @@ const Card = ({ _id, imageURL, title, description, date, header, uuid }) => {
         isClosable: true,
         position: 'top'
       });
-      await axios.delete(`http://localhost:5000/admin/delete?_id=${_id}&uuid=${uuid}`);
+      await axios.delete(`http://localhost:9090/admin/delete?_id=${_id}&uuid=${uuid}`);
       DataHandler();
       toast({
         title: '',
@@ -43,7 +40,7 @@ const Card = ({ _id, imageURL, title, description, date, header, uuid }) => {
         isClosable: true,
         position: 'top'
       });
-      
+
     } catch (err) {
       toast({
         title: 'Error',
@@ -66,7 +63,7 @@ const Card = ({ _id, imageURL, title, description, date, header, uuid }) => {
         <Image src={imageURL} alt={title} boxSize="30%" />
         <VStack align="start" spacing={2}>
           <Text fontWeight="bold">{header}</Text>
-          <Text>{title}</Text>
+          {/* <Text>{title}</Text> */}
           <Text fontSize="sm" color="gray.500">{`${date.split(' ')[1]} | ${date.split(' ')[2]} | ${date.split(' ')[3]}`}</Text>
 
           <HStack>
@@ -74,7 +71,7 @@ const Card = ({ _id, imageURL, title, description, date, header, uuid }) => {
             <Box _hover={{ cursor: 'pointer' }} fontWeight={500} borderRadius={'5px'} bgColor={'#40A2E3'} padding={'5px'} onClick={onEdit} >Edit</Box>
             <Box _hover={{ cursor: 'pointer' }} fontWeight={500} borderRadius={'5px'} bgColor={'#D04848'} padding={'5px'} onClick={onDelete}>Delete</Box>
           </HStack>
-          <ViewModal onClose={onClose} isOpen={isOpen} imageURL={imageURL} header={header} description={description}  />
+          <ViewModal onClose={onClose} isOpen={isOpen} imageURL={imageURL} header={header} description={description} />
         </VStack>
       </HStack>
       <EditModal isOpen={isEditOpen} onClose={onEditClose} _id={_id} uuid={uuid} header={header} title={title} description={description} imageURL={imageURL} />

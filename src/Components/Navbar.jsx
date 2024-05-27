@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaSun, FaMoon } from "react-icons/fa";
-import PopupModal from "./CreateNews";
+// import PopupModal from "./CreateNews";
 import SearchPopup from "./search";
 import { ContextAPI } from '../ContextAPI/Context.API';
 
@@ -16,9 +16,10 @@ import {
 
 function Navbar() {
   const { login, setLogin } = ContextAPI();
+  console.log(login)
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
-  const [isOpen, setOpen] = useState(false);
+  // const [isOpen, setOpen] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -31,9 +32,9 @@ function Navbar() {
     setIsNavOpen(!isNavOpen);
   };
 
-  const Modal = () => {
-    setOpen(!isOpen);
-  };
+  // const Modal = () => {
+  //   setOpen(!isOpen);
+  // };
 
 
   const handleLogOut = () => {
@@ -86,12 +87,12 @@ function Navbar() {
             flexWrap="wrap"
             color="green"
           >
-            <NavLink href="/">All News</NavLink>
-            <NavLink href="/ads">AD's</NavLink>
+            <NavLink href="/AllBlog">All Blog</NavLink>
+            {/* <NavLink href="/ads">AD's</NavLink> */}
             <NavLink href="/blog" >Blog</NavLink>
 
 
-            <Box
+            {/* <Box
               style={{ fontWeight: "bold", color: "green" }}
               onClick={() => {
                 Modal();
@@ -99,7 +100,7 @@ function Navbar() {
               _hover={{ cursor: "pointer" }}
             >
               Add News
-            </Box>
+            </Box> */}
             <SearchPopup />
 
           </Flex>
@@ -122,7 +123,7 @@ function Navbar() {
         </Flex>
       </Flex>
 
-      <PopupModal isOpen={isOpen} onClose={Modal} />
+      {/* <PopupModal isOpen={isOpen} onClose={Modal} /> */}
     </Box>
   );
 }

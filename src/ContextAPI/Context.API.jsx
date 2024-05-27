@@ -15,6 +15,11 @@ export const ContextProvider = ({ children }) => {
   const toast = useToast();
 
   useEffect(() => {
+    if (localStorage.getItem('Login') != 'True') {
+      setLogin(false); // If Admin already logged in, set login state to true (refresh the page not be show the loginpage)
+    } else {
+      setLogin(true);
+    }
     DataHandler();
   }, []);
 
@@ -23,7 +28,7 @@ export const ContextProvider = ({ children }) => {
     if (!Param) {
       console.log('ok')
       try {
-        let { data } = await axios.get('http://localhost:5000/admin/news?NoOfNews=10&Page=1');
+        let { data } = await axios.get('http://localhost:9090/admin/news?NoOfNews=10&Page=1');
         console.log(data.data)
         setData(data.data);
       } catch (err) {

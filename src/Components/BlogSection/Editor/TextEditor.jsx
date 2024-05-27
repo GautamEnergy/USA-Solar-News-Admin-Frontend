@@ -60,7 +60,7 @@ function TextEditor() {
     formData.append("Body", contentHtml);
 
     try {
-      const response = await axios.post("http://localhost:9090/admin/createNews", formData, {
+      const response = await axios.post("https://gautamsolar.us/admin/createNews", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

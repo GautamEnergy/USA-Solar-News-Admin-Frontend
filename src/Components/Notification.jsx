@@ -2,13 +2,7 @@ import React from 'react';
 import { Alert, AlertIcon, AlertTitle, AlertDescription } from '@chakra-ui/react';
 
 const Notification = ({ showAlert, status, title, description }) => {
-
-
-
-
-
   return (
-
     showAlert ? (
       <Alert status={status} variant="solid" width={{ base: "90%", md: "40%", lg: "40%" }} borderRadius={"5px"} marginTop={"10px"}>
         <AlertIcon />
@@ -20,4 +14,4 @@ const Notification = ({ showAlert, status, title, description }) => {
   );
 };
 
-export default Notification;
+export default Notification; 

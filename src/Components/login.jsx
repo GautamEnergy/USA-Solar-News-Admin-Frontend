@@ -32,11 +32,10 @@ const LoginPopup = () => {
   const toast = useToast();
 
   useEffect(() => {
-    console.log(localStorage.getItem('Login'))
-    if (localStorage.getItem('Login') != 'True') {
+    console.log('kdkd', localStorage.getItem('Login'))
+    if (!login) {
       setLoginOpen(true);
-    } else {
-      setLogin(true); // If Admin already logged in, set login state to true (refresh the page not be show the loginpage)
+
     }
 
   }, []);

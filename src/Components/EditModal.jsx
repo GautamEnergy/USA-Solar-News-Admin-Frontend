@@ -56,7 +56,7 @@ const EditModal = ({ isOpen, onClose, _id, header, title, description, imageURL,
         formData.append('UpdateNewsImage', editedImage);
       }
 
-      const { data } = await axios.patch(`http://localhost:5000/admin/updateNews?_id=${_id}&uuid=${uuid}`, formData, {
+      const { data } = await axios.patch(`http://localhost:9090/admin/updateNews?_id=${_id}&uuid=${uuid}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         },
