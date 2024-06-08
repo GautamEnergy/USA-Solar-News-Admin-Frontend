@@ -10,7 +10,7 @@ import LoginPopup from './Components/login';
 
 
 const App = () => {
-  return (
+  return ( 
     <div>
       <Router>
         <Navbar />

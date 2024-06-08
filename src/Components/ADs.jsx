@@ -125,7 +125,7 @@ const ImagePopupModal = ({ isOpen, onClose }) => {
               ) : (
                 <>
                   Drag & Drop{' '}
-                  
+
                   <label htmlFor="fileInput">
                     <u style={{}}>click to select</u>
                   </label>
@@ -139,7 +139,7 @@ const ImagePopupModal = ({ isOpen, onClose }) => {
                   />
                 </>
               )}
-            </div> 
+            </div>
           </ModalBody>
 
           <ModalFooter>

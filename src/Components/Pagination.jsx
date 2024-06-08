@@ -1,44 +1,44 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { HStack, Button } from '@chakra-ui/react';
 import { ContextAPI } from '../ContextAPI/Context.API';
 import { useToast } from '@chakra-ui/react';
 import axios from 'axios';
 
-const Pagination = ({  }) => {
-    const { setData } = ContextAPI()
-    const [disable,setDisable] = useState(false)
+const Pagination = ({ }) => {
+  const { setData } = ContextAPI()
+  const [disable, setDisable] = useState(false)
 
-    const toast = useToast();
-  const handlePrevious = async() => {
+  const toast = useToast();
+  const handlePrevious = async () => {
     if (+JSON.parse(localStorage.getItem('Page')) > 1) {
-        let { data } = await axios.get(`https://gautamsolar.us/admin/news?NoOfNews=5&Page=${Number(JSON.parse(localStorage.getItem('Page')))-1}`);
-        setData(data.data);
-        let tempPage = Number(JSON.parse(localStorage.getItem('Page')))-1;
-        localStorage.setItem('Page',`${tempPage}`);
-        setDisable(false)
+      let { data } = await axios.get(`https://gautamsolar.us/admin/news?NoOfNews=5&Page=${Number(JSON.parse(localStorage.getItem('Page'))) - 1}`);
+      setData(data.data);
+      let tempPage = Number(JSON.parse(localStorage.getItem('Page'))) - 1;
+      localStorage.setItem('Page', `${tempPage}`);
+      setDisable(false)
     }
   };
 
-  const handleNext = async() => {
-    try{
-        let { data } = await axios.get(`https://gautamsolar.us/admin/news?NoOfNews=5&Page=${Number(JSON.parse(localStorage.getItem('Page')))+1}`);
-        setData(data.data);
-        let tempPage = Number(JSON.parse(localStorage.getItem('Page')))+1;
-        localStorage.setItem('Page',`${tempPage}`);
-      
-    
-    }catch(err){
-        toast({
-            title: 'OOps !',
-            description: "We Had That Much data",
-            status: 'info',
-            duration: 3000,
-            isClosable: true,
-            position: 'top'
-          });
-        setDisable(true)
+  const handleNext = async () => {
+    try {
+      let { data } = await axios.get(`https://gautamsolar.us/admin/news?NoOfNews=5&Page=${Number(JSON.parse(localStorage.getItem('Page'))) + 1}`);
+      setData(data.data);
+      let tempPage = Number(JSON.parse(localStorage.getItem('Page'))) + 1;
+      localStorage.setItem('Page', `${tempPage}`);
+
+
+    } catch (err) {
+      toast({
+        title: 'OOps !',
+        description: "We Had That Much data",
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+        position: 'top'
+      });
+      setDisable(true)
     }
-    
+
   };
 
   return (
@@ -54,7 +54,7 @@ const Pagination = ({  }) => {
         Previous
       </Button>
       <Button
-      isDisabled={disable}
+        isDisabled={disable}
         onClick={handleNext}
         bg="blue.500"
         color="white"

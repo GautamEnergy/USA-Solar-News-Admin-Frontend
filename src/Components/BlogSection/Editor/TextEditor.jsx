@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw } from "draft-js";
 import { useToast } from '@chakra-ui/react';
 import draftToHtml from "draftjs-to-html";
 import { Parser } from 'html-to-react';
 import axios from "axios";
+import { ContextAPI } from '../../../ContextAPI/Context.API'
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import Tags from "../../Tags/Tags";
 
 function TextEditor() {
+
+
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState("");
@@ -16,6 +20,13 @@ function TextEditor() {
   const [description, setDescription] = useState("");
   const [header, setHeader] = useState("");
   const toast = useToast();
+  const { tags } = ContextAPI();
+
+
+
+  // useEffect(() => {
+  //   localStorage.setItem('tags', JSON.stringify(tags));
+  // }, [tags])
 
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
@@ -35,6 +46,7 @@ function TextEditor() {
   };
 
   const handleFileChange = (event) => {
+
     const file = event.target.files[0];
     setSelectedFile(file);
   };
@@ -49,7 +61,12 @@ function TextEditor() {
     setSelectedFile(file);
   };
 
+
+
+
   const publishBlog = async () => {
+
+
     const contentHtml = draftToHtml(
       convertToRaw(editorState.getCurrentContent())
     );
@@ -57,9 +74,13 @@ function TextEditor() {
 
 
     const formData = new FormData();
+
     formData.append("BlogImage", selectedFile);
     formData.append("Header", header);
     formData.append("Body", contentHtml);
+    formData.append('tags', JSON.stringify(tags));
+
+    console.log(formData)
 
     try {
       const response = await axios.post("https://gautamsolar.us/admin/createNews", formData, {
@@ -67,6 +88,7 @@ function TextEditor() {
           "Content-Type": "multipart/form-data",
         },
       });
+
       toast({
         title: '',
         description: "Blog Created Succesfully",
@@ -79,6 +101,7 @@ function TextEditor() {
       setHeader("");
       setEditorState(null);
     } catch (error) {
+      console.log(error)
       console.error("Error publishing blog:", error.message);
     }
   };
@@ -164,6 +187,8 @@ function TextEditor() {
           }}
         />
       </div>
+
+      <Tags />
 
       <div style={{ marginTop: "8px" }}>
         <button

@@ -11,25 +11,23 @@ export const ContextAPI = () => {
 
 export const ContextProvider = ({ children }) => {
   const [data, setData] = useState([]);
+  const [tags, setTags] = useState([]);
   const [login, setLogin] = useState(false);
-  
-
   const toast = useToast();
 
-
   useEffect(() => {
-   
+
     if (localStorage.getItem('Login') != 'True') {
       setLogin(false); // If Admin already logged in, set login state to true (refresh the page not be show the loginpage)
     } else {
       setLogin(true);
     }
     DataHandler();
-    localStorage.setItem('Page','1');
+    localStorage.setItem('Page', '1');
   }, []);
 
   const DataHandler = async (Param) => {
-    
+
     if (!Param) {
       console.log('ok')
       try {
@@ -47,14 +45,14 @@ export const ContextProvider = ({ children }) => {
           position: 'top'
         });
       }
-    } 
+    }
     else {
       setData(Param);
     }
   };
 
   return (
-    <Context.Provider value={{ DataHandler, setData, data, login, setLogin}}>
+    <Context.Provider value={{ DataHandler, setData, data, login, setLogin, tags, setTags }}>
       {children}
     </Context.Provider>
   );
