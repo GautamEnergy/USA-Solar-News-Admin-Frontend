@@ -3,29 +3,92 @@ import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw } from "draft-js";
 import { useToast } from '@chakra-ui/react';
 import draftToHtml from "draftjs-to-html";
+import {  ContentState } from 'draft-js';
+import { convertFromHTML } from 'draft-js';
 import { Parser } from 'html-to-react';
 import axios from "axios";
 import { ContextAPI } from '../../../ContextAPI/Context.API'
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Tags from "../../Tags/Tags";
+import { Token } from "@mui/icons-material";
+import { useLocation } from "react-router-dom"; 
+
 
 function TextEditor() {
 
-
+  const location = useLocation();
+  const { id } = location.state || {};
+  
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState("");
   // const [contentHtml, setcontentHtml] = useState('');
   const [description, setDescription] = useState("");
+  const [imagePreview, setImagePreview] = useState(null);
   const [header, setHeader] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
   const toast = useToast();
-  const { tags } = ContextAPI();
+  const { tags, setTags } = ContextAPI();
+ 
+  const Token1 = localStorage.getItem('token'); 
 
-
+  useEffect(() => {
+    if (id) {
+      // Define an async function within useEffect
+      const fetchData = async () => {
+        try {
+          const response = await axios.post(`https://gautamsolar.us/admin/news/edit`, { uuid: id });
+          const { Header, Description, Body, ImageURL, Tags } = response.data.data;
+  
+          setHeader(Header);
+          setDescription(Description);
+  
+          // Fetch the existing image from URL and set it as binary in selectedFile
+          try {
+            const imageResponse = await fetch(ImageURL);
+            const imageBlob = await imageResponse.blob();
+            setSelectedFile(imageBlob); // Store binary data for submission
+            setImagePreview(ImageURL); // Show image preview
+          } catch (error) {
+            console.error("Error fetching image as binary:", error);
+          }
+  
+          // Parse and format tags
+          let parsedTagsArray = [];
+          try {
+            parsedTagsArray = Tags && Tags !== "[]" ? JSON.parse(Tags) : [];
+          } catch (error) {
+            console.error("Error parsing tags:", error);
+          }
+  
+          const formattedTags = parsedTagsArray.map(tag => ({
+            tag: tag.tag?.trim() || "",
+            link: tag.link || ""
+          }));
+  
+          setSelectedTags(formattedTags);
+          setTags(formattedTags); 
+  
+          // Set editor content from Body HTML
+          const editorContent = Body 
+            ? EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(Body)))
+            : EditorState.createEmpty(); // Empty editor if Body is empty
+  
+          setEditorState(editorContent);
+        } catch (error) {
+          console.error("Error fetching blog data:", error);
+        }
+      };
+  
+      // Call the async function
+      fetchData();
+    }
+  }, [id]);
 
   // useEffect(() => {
-  //   localStorage.setItem('tags', JSON.stringify(tags));
+  //   const Token1 = localStorage.getItem('token'); // Example of getting token from localStorage
+
   // }, [tags])
 
   const onEditorStateChange = (editorState) => {
@@ -46,9 +109,9 @@ function TextEditor() {
   };
 
   const handleFileChange = (event) => {
-
     const file = event.target.files[0];
-    setSelectedFile(file);
+    setSelectedFile(file);  // Update selectedFile
+    setImagePreview(URL.createObjectURL(file));  // Update image preview
   };
 
   const handleDragOver = (event) => {
@@ -64,53 +127,63 @@ function TextEditor() {
 
 
 
-  const publishBlog = async () => {
+ 
+const publishBlog = async () => {
+  const contentHtml = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+  const formData = new FormData();
+
+  // Check if a new image has been selected or fetch the existing image as binary
+  
+
+  formData.append("Header", header);
+  formData.append("Description", description);
+  formData.append("Body", contentHtml);
+  formData.append("UUID", id || ""); // Use UUID if updating or create new entry
+  formData.append('tags', JSON.stringify(tags));
+  formData.append("BlogImage", selectedFile);
 
 
-    const contentHtml = draftToHtml(
-      convertToRaw(editorState.getCurrentContent())
-    );
+  try {
+    await axios.post("https://gautamsolar.us/admin/createNews", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${Token1}`
+      },
+    });
 
+    toast({
+      title: '',
+      description: `Blog ${id ? "Updated" : "Created"} Successfully`,
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+      position: 'top'
+    });
 
+    // Reset form after submission
+    setSelectedFile(null);
+    setHeader("");
+    setDescription("");
+    setEditorState(EditorState.createEmpty());
 
-    const formData = new FormData();
-
-    formData.append("BlogImage", selectedFile);
-    formData.append("Header", header);
-    formData.append("Body", contentHtml);
-    formData.append('tags', JSON.stringify(tags));
-
-    console.log(formData)
-
-    try {
-      const response = await axios.post("https://gautamsolar.us/admin/createNews", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      toast({
-        title: '',
-        description: "Blog Created Succesfully",
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-        position: 'top'
-      })
-      setSelectedFile(null);
-      setHeader("");
-      setEditorState(null);
-    } catch (error) {
-      console.log(error)
-      console.error("Error publishing blog:", error.message);
-    }
-  };
+  } catch (error) {
+    console.error("Error publishing blog:", error.message);
+    toast({
+      title: 'Error',
+      description: "An error occurred while publishing the blog.",
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+      position: 'top'
+    });
+  }
+};
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
       <h2>Upload Blog</h2>
 
-      <div
+      {/* <div
         onDragOver={handleDragOver}
         onDrop={handleDrop}
         style={{
@@ -134,13 +207,55 @@ function TextEditor() {
             <input
               type="file"
               id="fileInput"
-              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+              accept="*"
               style={{ display: "none" }}
               onChange={handleFileChange}
 
             />
           </>
         )}
+      </div> */}
+       <div
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+        style={{
+          border: "2px dashed #cccccc",
+          borderRadius: "5px",
+          padding: "20px",
+          textAlign: "center",
+          marginBottom: "20px",
+        }}
+      >
+        {imagePreview ? (
+          <>
+            <img
+              src={imagePreview}
+              alt="Blog Preview"
+              style={{
+                width: "200px",
+                height: "200px",
+                objectFit: "cover",
+                borderRadius: "8px",
+                marginBottom: "10px",
+              }}
+            />
+           <p style={{ fontWeight: "bold", fontSize: "large" }}>
+  {selectedFile ? selectedFile.name : "No file selected"}
+</p>
+          </>
+        ) : (
+          <p>No image selected</p>
+        )}
+        <input
+          type="file"
+          id="fileInput"
+          accept="*"
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
+        <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
+          <u>{imagePreview ? "Change Image" : "Click to Select Image"}</u>
+        </label>
       </div>
       <label htmlFor="header" style={{ marginRight: "10px" }}>
         Header:
@@ -150,6 +265,23 @@ function TextEditor() {
         id="header"
         value={header}
         onChange={(e) => setHeader(e.target.value)}
+        style={{
+          marginBottom: "10px",
+          padding: "8px",
+          border: "1px solid #ccc",
+          borderRadius: "5px",
+          width: "100%",
+          fontSize: "16px",
+        }}
+      />
+       <label htmlFor="description" style={{ marginRight: "10px" }}>
+        Description:
+      </label>
+      <input
+        type="text"
+        id="description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
         style={{
           marginBottom: "10px",
           padding: "8px",
